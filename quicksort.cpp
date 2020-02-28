@@ -9,38 +9,58 @@
 #include <memory>
 #include <algorithm>
 using namespace std;
-
-int Partition(vector<int>&A, int left, int right)
+// Swap two elements - Utility function
+   
+int partition (int arr[], int low, int high)
 {
-    int split=left-1;
-    int pivot=A[right];
-    for(int i=left;i<=right-1;i++)
+    int pivot = arr[high];    // pivot
+    int i = (low - 1);
+   
+    for (int j = low; j <= high- 1; j++)
     {
-        if(A[i]<=pivot)
+        //if current element is smaller than pivot, increment the low element
+        //swap elements at i and j
+        if (arr[j] <= pivot)
         {
-            split++;
-            swap(A[split],A[i]);
+            i++;    // increment index of smaller element
+            swap(arr[i], arr[j]);
         }
     }
-    swap(A[split+1],A[right]);
-    return (split+1);
+    swap(arr[i + 1], arr[high]);
+    return (i + 1);
 }
-
-void QuickSort(vector<int>& A, int left, int right)
+   
+//quicksort algorithm
+void quickSort(int arr[], int low, int high)
 {
-    if(left<right)
+    if (low < high)
     {
-        int mid=Partition(A, left, right);
-        QuickSort(A,left,mid-1);
-        QuickSort(A, mid+1, right);
+        //partition the array
+        int pivot = partition(arr, low, high);
+   
+        //sort the sub arrays independently
+        quickSort(arr, low, pivot - 1);
+        quickSort(arr, pivot + 1, high);
     }
-    return;
 }
-
+   
+void displayArray(int arr[], int size)
+{
+    int i;
+    for (i=0; i < size; i++)
+        cout<<arr[i]<<"\t";
+      
+}
+   
 int main()
 {
-    vector<int> A{3,4,2,2,3,1,100};
-    QuickSort(A, 0, A.size()-1);
-    for_each(A.begin(), A.end(), [](int x){cout<<x<<endl;});
+    int arr[] = {12,23,3,43,51,35,19,45};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    cout<<"Input array"<<endl;
+    displayArray(arr,n);
+    cout<<endl;
+    quickSort(arr, 0, n-1);
+    cout<<"Array sorted with quick sort"<<endl;
+    displayArray(arr,n);
     return 0;
 }
